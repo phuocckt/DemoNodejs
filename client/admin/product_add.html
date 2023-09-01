@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+    <title>Product ADD</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <form action="" method="post" id="editForm">
+                    <!-- <div class="form-group">
+                        <label for="txtSKU">SKU:</label>
+                        <input id="txtSKU" class="form-control" type="text" name="SKU" required>
+                    </div> -->
+                    <div class="form-group">
+                        <label for="txtName">Name:</label>
+                        <input id="txtName" class="form-control" type="text" name="Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDescription">Description:</label>
+                        <textarea name="Description" id="txtDescription" cols="40" rows="10"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtPrice">Price:</label>
+                        <input id="txtPrice" class="form-control" type="text" name="Price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtStock">Stock:</label>
+                        <input id="txtStock" class="form-control" type="text" name="Stock" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtProductTypeld">ProductTypeld:</label>
+                        <select name="ProductTypeld" id="txtProductTypeld">
+                            <option value="1">Iphone</option>
+                            <option value="2">Samsung</option>
+                            <option value="3">Oppo</option>
+                            <option value="4">Redmi</option>
+                            <option value="5">Realme</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtImage">Image:</label>
+                        <input id="txtImage" class="form-control" type="file" name="Image" required>
+                    </div>
+                    <button class="btn btn-success" type="submit"><i class="fa fa-plus" aria-hidden="true"></i>
+                        Thêm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script>
+        var app = angular.module("myApp", []);
+
+        var currentURL = window.location.href;
+
+            // Phân tích URL
+            var urlParts = currentURL.split('/');
+            var accountId = urlParts[urlParts.length - 1];
+        app.controller("myCtrl", ($scope, $http, $window) => {
+            $http.post('http://localhost:1234/admin/products/add/'+accountId, JSON.stringify(data)).then(function (res) {
+            });
+            document.getElementById('editForm').action = "http://localhost:1234/admin/products/add/" + productId;
+        });
+    </script>
+</body>
+
+</html>

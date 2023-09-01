@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/vendor/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <title>Product EDIT</title>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <form action="" method="post" id="editForm">
+                    <div class="form-group">
+                        <label for="txtName">Name:</label>
+                        <input id="txtName" class="form-control" type="text" name="Name" required ng-model="products.Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDescription">Description:</label>
+                        <textarea name="Description" id="txtDescription" cols="40" rows="10" ng-model="products.Description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtPrice">Price:</label>
+                        <input id="txtPrice" class="form-control" type="text" name="Price" required ng-model="products.Price">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtStock">Stock:</label>
+                        <input id="txtStock" class="form-control" type="text" name="Stock" required ng-model="products.Stock">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtProductTypeld">ProductTypeld:</label>
+                        <select name="ProductTypeld" id="txtProductTypeld" style="width: 200px;" ng-model="products.ProductTypeld" required>
+                            <option value="1">Iphone</option>
+                            <option value="4">Redmi</option>
+                            <option value="5">Realme</option>
+                            <option value="2">Samsung</option>
+                            <option value="3">Oppo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtImage">Image:</label>
+                        <input id="txtImage" class="form-control" type="file" name="Image" required>
+                    </div>
+                    <button class="btn btn-warning" type="submit"><i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                        Sửa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script>
+    <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script>
+        var app = angular.module("myApp", []);
+        app.controller("myCtrl", ($scope, $http, $window, $httpParamSerializer) => {
+            // Lấy giá trị id từ URL
+            var currentURL = window.location.href;
+
+            // Phân tích URL
+            var urlParts = currentURL.split('/');
+            var productId = urlParts[urlParts.length - 1];
+            $http.get(`http://localhost:1234/admin/select/${productId}/details`).then(res => {
+                $scope.products = res.data[0];
+                $scope.products.ProductTypeld = res.data[0].ProductTypeld.toString();
+            });
+            // Gửi yêu cầu GET để lấy thông tin sản phẩm với id tương ứng
+            $http.get(`http://localhost:1234/admin/edit/${productId}`).then(res => {
+            });
+            document.getElementById('editForm').action = "http://localhost:1234/admin/edit/" + productId;
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+    <link rel="stylesheet" href="/vendor/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <title>Edit Account</title>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <form action="" method="post" id="editForm">
+                    <div class="form-group">
+                        <label for="txtUserName">userName:</label>
+                        <input id="txtUserName" class="form-control" type="text" name="userName" ng-model="accounts.Username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtPassWord">passWord:</label>
+                        <input id="txtPassWord" class="form-control" type="text" name="passWord" ng-model="accounts.Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtEmail">email:</label>
+                        <input id="txtEmail" class="form-control" type="text" name="email" ng-model="accounts.Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtPhone">phone:</label>
+                        <input id="txtPhone" class="form-control" type="text" name="phone" ng-model="accounts.Phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtAddress">address:</label>
+                        <input id="txtAddress" class="form-control" type="text" name="address" ng-model="accounts.Address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtFullName">fullName:</label>
+                        <input id="txtFullName" class="form-control" type="text" name="fullName" ng-model="accounts.FullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtAvatar">avatar:</label>
+                        <input id="txtAvatar" class="form-control" type="file" name="avatar" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtStatus">status:</label>
+                        <select name="status" id="txtStatus" style="width: 200px;">
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Không hoạt động</option>
+                        </select>
+                    </div><br>
+                    <button class="btn btn-warning" type="submit"><i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                        Sửa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script>
+    <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', ($scope, $http, $window) => {
+            var currentURL = window.location.href;
+
+            // Phân tích URL
+            var urlParts = currentURL.split('/');
+            var id = urlParts[urlParts.length - 1];
+            $http.get(`http://localhost:1234/admin/accounts/select/${id}/details`).then(res => {
+                $scope.accounts = res.data[0];
+            });
+            $http.get(`http://localhost:1234/admin/accounts/edit/${id}`).then(response => {
+            });
+            document.getElementById('editForm').action = "http://localhost:1234/admin/accounts/edit/" + id;
+        });
+    </script>
+</body>
+
+</html>

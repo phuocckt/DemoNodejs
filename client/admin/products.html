@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/vendor/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/vendor/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <title>PRODUCTS</title>
+  <style>
+        .welcome{
+            background-color: black;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+  <header>
+    <div class="welcome">Welcome admin</div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="" id="idAccount">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style="justify-content: space-between;">
+          <div class="navbar-nav">
+            <a class="nav-link active" aria-current="page" href="" id="idAccounts">Products</a>
+            <a class="nav-link" aria-current="page" href="" id="idAccount1">Accounts</a>
+            <a class="nav-link" aria-current="page" href="" id="idAccount2">Invoices</a>
+          </div>
+          <a href="http://localhost:1234/"><i class="fas fa-user">Logout</i></a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      <a href="" id="idAccountss" class="btn btn-success"><i class="fa fa-plus"
+          aria-hidden="true"></i>
+        ADD</a>
+      <div class="table-responsive text-center">
+        <table class="table table-light table-light mt-2">
+          <thead class="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>SKU</th>
+              <th>NAME</th>
+              <th>DESCRIPTION</th>
+              <th>PRICE</th>
+              <th>STOCK</th>
+              <th>PRODUCTTYPE</th>
+              <th>IMAGE</th>
+              <th>STATUS</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in products track by $index">
+              <td>{{ item.Id }}</td>
+              <td>{{ item.SKU }}</td>
+              <td>{{ item.Name }}</td>
+              <td>{{ item.Description }}</td>
+              <td>{{ item.Price }}</td>
+              <td>{{ item.Stock }}</td>
+              <td>{{ item.ProductTypeld }}</td>
+              <td><img src="/img/{{ item.Image }}" alt="image" width="200" style="margin-top: 30px;"></td>
+              <td>{{ item.Status.data }}</td>
+              <td>
+                <a href="http://localhost:1234/admin/edit/{{ item.Id }}" class="btn btn-warning"><i
+                    class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                <a href="http://localhost:1234/admin/delete/{{ item.Id }}"><button class="btn btn-danger"><i
+                    class="fas fa-trash-alt"></i></button></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script>
+  <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/angular.min.js"></script>
+  <script>
+    var app = angular.module("myApp", []);
+    var currentUrl = window.location.href;
+
+    // Tìm vị trí của tham số "id" trong URL
+    var idIndex = currentUrl.indexOf("id=");
+    // Lấy giá trị của tham số "id" bằng cách cắt chuỗi từ vị trí của "id" cho đến ký tự kết thúc chuỗi hoặc ký tự tiếp theo
+    var idValue = currentUrl.substring(idIndex + 3);
+
+    document.getElementById("idAccount").href = "http://localhost:1234/admin/products?id=" + idValue;
+    document.getElementById("idAccounts").href = "http://localhost:1234/admin/products?id=" + idValue;
+    document.getElementById("idAccount1").href = "http://localhost:1234/admin/accounts?id=" + idValue;
+    document.getElementById("idAccount2").href = "http://localhost:1234/admin/invoicedetails?id=" + idValue;
+    document.getElementById("idAccountss").href = "http://localhost:1234/admin/products/add/" + idValue;
+    app.controller("myCtrl", ($scope, $http, $window) => {
+      $http.get("http://localhost:1234/admin/products/products").then(res => {
+        $scope.products = res.data;
+      })
+    });
+  </script>
+</body>
+
+</html>

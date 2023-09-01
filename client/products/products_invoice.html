@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+    <title>Product Invoice</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <form action="" method="post" id="editForm">
+                    <div class="form-group">
+                        <label for="txtShippingAddress">ShippingAddress:</label>
+                        <input id="txtShippingAddress" class="form-control" type="text" name="ShippingAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtShippingPhone">ShippingPhone:</label>
+                        <input id="txtShippingPhone" class="form-control" type="text" name="ShippingPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtTotal">Total:</label>
+                        <input id="txtTotal" class="form-control" type="text" name="Total">
+                    </div>
+                    <button class="btn btn-success" type="submit"><i class="fa fa-plus" aria-hidden="true"></i>
+                        Thêm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script>
+        var app = angular.module("myApp", []);
+        var currentURL = window.location.href;
+
+        // Phân tích URL
+        var urlParts = currentURL.split('/');
+        var id = urlParts[urlParts.length - 1];
+        app.controller("myCtrl", ($scope, $http, $window) => {
+            $http.post(`http://localhost:1234/products/invoices/${id}`, JSON.stringify(data)).then(function (res) {
+            });
+            document.getElementById('editForm').action = "http://localhost:1234/products/invoices/" + id;
+        });
+    </script>
+</body>
+
+</html>
