@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/vendor/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <title>PRODUCTS TYPES</title>
+    <style>
+        .welcome {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <header>
+        <div class="welcome">Welcome user</div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="" id="idAccount">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style="justify-content: space-between;">
+                    <div class="navbar-nav">
+                        <a class="nav-link active" aria-current="page" href="" id="idAccounts">Products</a>
+                        <div class="product-list" ng-repeat="item in product track by $index">
+                            <ul>
+                                <li ng-repeat="items in accounts track by $index"><a
+                                        href="http://localhost:1234/products/types/{{ item.productsId }}?id={{ items.Id }}">Product
+                                        Types</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="http://localhost:1234/"><i class="fas fa-user">Logout</i></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <h2>Products Types</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-12" ng-repeat="item in products track by $index">
+                    <div class="card mb-3">
+                        <a href="" ng-click="detail(item.Id)" id="details"><img src="/img/{{ item.Image }}" alt="image"
+                                class="card-img-top"></a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.Name }}</h5>
+                            <em><strong class="list-group-item"> {{ item.Price }} </strong></em>
+                            <p class="card-text">{{ item.Description }}</p>
+                            <p class="card-text">{{ item.ProductTypeld }}</p>
+                            <a href="" ng-click="buyDetail()" class="btn btn-success btn-block">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script>
+    <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script>
+        var app = angular.module("myApp", []);
+        app.controller("myCtrl", function ($scope, $http, $window) {
+            $scope.products = [];
+            $scope.accounts = [];
+            // Lấy giá trị id từ URL
+            var currentURL = window.location.href;
+
+            // Phân tích URL
+            var urlParts = currentURL.split('/');
+            var productTypeId = urlParts[urlParts.length - 1];
+            var urlParams = new URLSearchParams($window.location.search);
+            var idValue = urlParams.get("id");
+            document.getElementById("idAccount").href = "http://localhost:1234/products?id=" + idValue;
+            document.getElementById("idAccounts").href = "http://localhost:1234/products?id=" + idValue;
+            $http.get("http://localhost:1234/products/products").then(function (res) {
+                $scope.product = res.data;
+            });
+            $http.get(`http://localhost:1234/products/products/types/${productTypeId}`).then(function (res) {
+                $scope.products = res.data;
+            });
+            $http.get(`http://localhost:1234/admin/accounts/select/${idValue}/details`).then(function (res) {
+                $scope.accounts = res.data;
+            });
+            $scope.buyDetail = function () {
+                var detail = `http://localhost:1234/products/invoices/${idValue}`;
+                $window.location.href = detail;
+            }
+            $scope.detail = function (productId) {
+                var details = "http://localhost:1234/products/details?pro=" + productId + "&id=" + idValue;
+                $window.location.href = details;
+            }
+        });
+    </script>
+</body>
+
+</html>

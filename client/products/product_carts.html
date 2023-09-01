@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/vendor/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <title>PRODUCTS</title>
+    <style>
+        .welcome {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .container:has(:not(#txtProducts:checked)) #buyButton{
+            display: none;
+        }
+        .container:has(#txtProducts:checked) #buyButton{
+            display: block;
+        }    
+    </style>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <header>
+        <div class="welcome">Welcome user</div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="" id="idAccount">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style="justify-content: space-between;">
+                    <div class="navbar-nav">
+                        <a class="nav-link active" aria-current="page"
+                            href="" id="idAccounts">Products</a>
+                        <div class="product-list" ng-repeat="item in products track by $index">
+                            <ul>
+                                <li><a href="http://localhost:1234/products/types/{{ item.productsId }}">Product
+                                        Types</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="http://localhost:1234/"><i class="fas fa-user">Logout</i></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <h2>Carts</h2>
+            <div class="table-responsive text-center">
+                <table class="table table-light table-light mt-2">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Check</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in carts track by $index">
+                            <td>{{ $index+1 }}</td>
+                            <td>{{ item.Name }}</td>
+                            <td><img src="/img/{{ item.Image }}" alt="image" width="200" style="margin-top: 30px;"></td>
+                            <td>{{ item.Price }}</td>
+                            <td>{{ item.Quantity }}</td>
+                            <td><input type="checkbox" name="products" id="txtProducts"></td>
+                            <td ng-repeat="items in accounts">
+                                <a href="http://localhost:1234/products/delete/{{ item.Id }}/{{ items.Id }}" class="btn btn-danger btn-block">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <a href="" id="buyButton" class="btn btn-success btn-block">Buy Now</a>
+        </div>
+    </main>
+    <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script>
+    <script src="/vendor/bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script>
+        var app = angular.module("myApp", []);
+        var urlParams = new URLSearchParams(window.location.search);
+        var currentUrl = window.location.href;
+
+        var urlParts2=currentUrl.split('/');
+        var idAccount=urlParts2[urlParts2.length-1];
+        document.getElementById("buyButton").href = "http://localhost:1234/products/invoices/" + idAccount;
+        document.getElementById("idAccount").href = "http://localhost:1234/products?id=" + idAccount;
+        document.getElementById("idAccounts").href = "http://localhost:1234/products?id=" + idAccount;
+
+        app.controller("myCtrl", function ($scope, $http, $window) {
+            $scope.carts = [];
+            $scope.accounts=[];
+            $scope.cart=[];
+
+            $http.get(`http://localhost:1234/products/products/carts/${idAccount}`).then(function (res) {
+                $scope.carts = res.data;
+            });
+            $http.get(`http://localhost:1234/admin/accounts/select/${idAccount}/details`).then(function (res) {
+                $scope.accounts = res.data;
+            });
+        });
+    </script>
+</body>
+
+</html>
